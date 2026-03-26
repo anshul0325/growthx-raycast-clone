@@ -118,10 +118,10 @@ function FrostedGlass({ config }: { config: GlassConfig }) {
 const FINAL_CONFIG = {
   glass: {
     transmission: 1,
-    thickness: 1.1,
-    roughness: 0.42,
-    chromaticAberration: 0.51,
-    anisotropy: 1.4,
+    thickness: 3.3,
+    roughness: 0.5,
+    chromaticAberration: 0.22,
+    anisotropy: 2.5,
     distortion: 0.2,
     ior: 1.2,
     color: "#ffffff",

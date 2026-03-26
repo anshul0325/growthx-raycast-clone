@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import HeroBackground from "@/components/landing/HeroBackgroundStreaks";
+import HeroArtifact from "@/components/landing/HeroArtifact";
 
 export default function Hero() {
   return (
@@ -74,6 +75,7 @@ export default function Hero() {
       `}</style>
 
       <HeroBackground />
+      <HeroArtifact />
 
       {/* Outer wrapper */}
       <div
