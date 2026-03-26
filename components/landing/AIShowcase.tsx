@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const TAB_DURATION_MS = 6000;
@@ -54,8 +54,11 @@ const chatData = [
 export default function AIShowcase() {
   const [activeTab, setActiveTab] = useState(0);
   const [hoveredTab, setHoveredTab] = useState<number | null>(null);
+  const [progress, setProgress] = useState(0);
+  const startTimeRef = useRef(Date.now());
 
   useEffect(() => {
+    startTimeRef.current = Date.now();
     const timer = window.setTimeout(() => {
       setActiveTab((prev) => (prev + 1) % chatData.length);
     }, TAB_DURATION_MS);
