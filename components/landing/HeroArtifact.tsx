@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useRef, useMemo, useEffect, useState } from "react";
+import React, { useRef, useMemo, useEffect, useState, Component, ReactNode } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { MeshTransmissionMaterial, Environment, Float } from "@react-three/drei";
 import * as THREE from "three";
+
+// ---------------------------------------------------------------------------
+// Config
+// ---------------------------------------------------------------------------
 
 const CONFIG = {
   glass: {
@@ -28,12 +32,20 @@ const CONFIG = {
     axisX: 0.9,
     axisY: 1.1,
     axisZ: 1.4,
-  }
+  },
 };
+
+// ---------------------------------------------------------------------------
+// Static allocations (module-level to avoid per-render GC pressure)
+// ---------------------------------------------------------------------------
 
 const cubeBoxGeo = new THREE.BoxGeometry(1.5, 1.5, 1.5);
 const edgesBoxGeo = new THREE.BoxGeometry(1.51, 1.51, 1.51);
 const normalScaleVec = new THREE.Vector2(CONFIG.glass.ribIntensity, CONFIG.glass.ribIntensity);
+
+// ---------------------------------------------------------------------------
+// Scene components
+// ---------------------------------------------------------------------------
 
 function RotatingCube({ config }: { config: typeof CONFIG.cube }) {
   const meshRef = useRef<THREE.Mesh>(null!);
@@ -65,7 +77,7 @@ function FrostedGlass({ config }: { config: typeof CONFIG.glass }) {
   const size = Math.max(viewport.width, viewport.height) * 2;
 
   const normalMap = useMemo(() => {
-    if (typeof document === 'undefined') return null;
+    if (typeof document === "undefined") return null;
     const canvas = document.createElement("canvas");
     canvas.width = 512;
     canvas.height = 512;
@@ -84,11 +96,11 @@ function FrostedGlass({ config }: { config: typeof CONFIG.glass }) {
         const idx = (y * canvasSize + x) * 4;
         const projected = (x / canvasSize) * cosR + (y / canvasSize) * sinR;
         const angle = projected * Math.PI * 2 * freq;
-        const val = Math.cos(angle); 
-        imgData.data[idx] = (val * cosR * 0.5 + 0.5) * 255;
+        const val = Math.cos(angle);
+        imgData.data[idx]     = (val * cosR * 0.5 + 0.5) * 255;
         imgData.data[idx + 1] = (val * sinR * 0.5 + 0.5) * 255;
-        imgData.data[idx + 2] = 255; 
-        imgData.data[idx + 3] = 255; 
+        imgData.data[idx + 2] = 255;
+        imgData.data[idx + 3] = 255;
       }
     }
     ctx.putImageData(imgData, 0, 0);
@@ -98,11 +110,7 @@ function FrostedGlass({ config }: { config: typeof CONFIG.glass }) {
     return texture;
   }, [config.ribFrequency, config.ribRotation]);
 
-  useEffect(() => {
-    return () => {
-      normalMap?.dispose();
-    };
-  }, [normalMap]);
+  useEffect(() => () => { normalMap?.dispose(); }, [normalMap]);
 
   return (
     <mesh position={[0, 0, 1]}>
@@ -114,13 +122,17 @@ function FrostedGlass({ config }: { config: typeof CONFIG.glass }) {
         normalScale={normalScaleVec}
         distortion={0.5}
         temporalDistortion={0}
-        samples={8}
+        samples={4}        // 8→4: halves transmission cost; ribbed distortion masks difference
         resolution={512}
         transparent={true}
       />
     </mesh>
   );
 }
+
+// ---------------------------------------------------------------------------
+// WebGL detection
+// ---------------------------------------------------------------------------
 
 function isWebGLAvailable(): boolean {
   try {
@@ -133,6 +145,25 @@ function isWebGLAvailable(): boolean {
     return false;
   }
 }
+
+// ---------------------------------------------------------------------------
+// Error boundary — catches runtime WebGL failures (context loss, shader errors)
+// ---------------------------------------------------------------------------
+
+class CanvasErrorBoundary extends Component<
+  { fallback: ReactNode; children: ReactNode },
+  { error: boolean }
+> {
+  state = { error: false };
+  static getDerivedStateFromError() { return { error: true }; }
+  render() {
+    return this.state.error ? this.props.fallback : this.props.children;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Shared styles
+// ---------------------------------------------------------------------------
 
 const containerStyle: React.CSSProperties = {
   position: "absolute",
@@ -163,6 +194,10 @@ function FallbackGlow() {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Export
+// ---------------------------------------------------------------------------
+
 export default function HeroArtifact() {
   const [mounted, setMounted] = useState(false);
   const [webglAvailable, setWebglAvailable] = useState(true);
@@ -176,37 +211,35 @@ export default function HeroArtifact() {
   if (!webglAvailable) return <FallbackGlow />;
 
   return (
-    <div style={containerStyle}>
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 45 }}
-        gl={{
-          alpha: true,
-          antialias: true,
-          powerPreference: "high-performance",
-          stencil: false,
-          depth: true,
-          premultipliedAlpha: false,
-          failIfMajorPerformanceCaveat: false,
-        }}
-        dpr={[1, 2]}
-        onCreated={({ gl }) => {
-          if (!gl.getContext()) {
-            setWebglAvailable(false);
-          }
-        }}
-      >
-        <ambientLight intensity={1.5} />
-        <pointLight position={[10, 10, 10]} intensity={2.5} />
-        <pointLight position={[-10, -10, -10]} color="#ff00ff" intensity={2} />
-        <directionalLight position={[0, 5, 5]} intensity={1} />
-        <Environment preset="city" />
+    <CanvasErrorBoundary fallback={<FallbackGlow />}>
+      <div style={containerStyle}>
+        <Canvas
+          camera={{ position: [0, 0, 5], fov: 45 }}
+          gl={{
+            alpha: true,
+            antialias: false,          // no visible edges through frosted glass → skip MSAA cost
+            powerPreference: "high-performance",
+            stencil: false,
+            depth: true,
+            premultipliedAlpha: false,
+            failIfMajorPerformanceCaveat: false,  // allow software renderer
+          }}
+          dpr={[1, 1.5]}               // was [1,2]; saves ~44% pixels on HiDPI with no visible diff
+          performance={{ min: 0.5 }}   // auto-reduce DPR if FPS drops below target
+        >
+          <ambientLight intensity={1.5} />
+          <pointLight position={[10, 10, 10]} intensity={2.5} />
+          <pointLight position={[-10, -10, -10]} color="#ff00ff" intensity={2} />
+          <directionalLight position={[0, 5, 5]} intensity={1} />
+          <Environment preset="city" />
 
-        <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-          <RotatingCube config={CONFIG.cube} />
-        </Float>
+          <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+            <RotatingCube config={CONFIG.cube} />
+          </Float>
 
-        <FrostedGlass config={CONFIG.glass} />
-      </Canvas>
-    </div>
+          <FrostedGlass config={CONFIG.glass} />
+        </Canvas>
+      </div>
+    </CanvasErrorBoundary>
   );
 }
