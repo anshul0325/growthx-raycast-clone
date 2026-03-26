@@ -97,24 +97,23 @@ export default function FeatureWall() {
           }}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={isTextInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, ease: EASE, delay: 0.1 }}
-              style={{ fontSize: "32px", fontWeight: 600, color: "white", letterSpacing: "-0.02em", lineHeight: 1.2, margin: 0 }}
+              style={{ fontSize: "20px", fontWeight: 600, color: "white", letterSpacing: "-0.02em", lineHeight: 1.2, margin: 0 }}
             >
               It&apos;s not about saving time.
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={isTextInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
-              style={{ fontSize: "32px", fontWeight: 400, color: "rgba(255,255,255,0.45)", letterSpacing: "-0.02em", margin: 0, lineHeight: 1.2 }}
+              style={{ fontSize: "20px", fontWeight: 400, color: "rgba(255,255,255,0.45)", letterSpacing: "-0.02em", margin: 0, lineHeight: 1.2 }}
             >
               It&apos;s about feeling like you&apos;re never wasting it.
             </motion.p>
-          </div>
-          <motion.div
+          </div>          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isTextInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, ease: EASE, delay: 0.3 }}
