@@ -8,31 +8,31 @@ import * as THREE from "three";
 const CONFIG = {
   glass: {
     transmission: 1,
-    thickness: 2,
-    roughness: 0.1,
-    chromaticAberration: 0.04,
-    anisotropy: 0.1,
-    distortion: 0.1,
+    thickness: 3.3,
+    roughness: 0.5,
+    chromaticAberration: 0.22,
+    anisotropy: 2.5,
+    distortion: 0.2,
     ior: 1.2,
     color: "#ffffff",
     attenuationColor: "#ffffff",
     attenuationDistance: 0.5,
     ribFrequency: 20,
-    ribIntensity: 0.3,
+    ribIntensity: 0.5,
     ribRotation: 139,
   },
   cube: {
     speed: 0.3,
     color: "#ff0040",
-    positionZ: -1.2,
+    positionZ: -0.7,
     axisX: 0.9,
     axisY: 1.1,
     axisZ: 1.4,
   }
 };
 
-const cubeBoxGeo = new THREE.BoxGeometry(2, 2, 2);
-const edgesBoxGeo = new THREE.BoxGeometry(2.01, 2.01, 2.01);
+const cubeBoxGeo = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+const edgesBoxGeo = new THREE.BoxGeometry(1.51, 1.51, 1.51);
 const normalScaleVec = new THREE.Vector2(CONFIG.glass.ribIntensity, CONFIG.glass.ribIntensity);
 
 function RotatingCube({ config }: { config: typeof CONFIG.cube }) {
@@ -47,14 +47,14 @@ function RotatingCube({ config }: { config: typeof CONFIG.cube }) {
 
   return (
     <mesh ref={meshRef} position={[0, 0, config.positionZ]} geometry={cubeBoxGeo}>
-      <meshStandardMaterial 
-        color={config.color} 
-        emissive={config.color} 
-        emissiveIntensity={4} 
+      <meshStandardMaterial
+        color={config.color}
+        emissive={config.color}
+        emissiveIntensity={0.5}
       />
       <lineSegments>
         <edgesGeometry args={[edgesBoxGeo]} />
-        <lineBasicMaterial color="white" transparent opacity={0.6} />
+        <lineBasicMaterial color="white" transparent opacity={0.3} />
       </lineSegments>
     </mesh>
   );
@@ -112,9 +112,9 @@ function FrostedGlass({ config }: { config: typeof CONFIG.glass }) {
         {...config}
         normalMap={normalMap || undefined}
         normalScale={normalScaleVec}
-        distortion={0.3}
+        distortion={0.5}
         temporalDistortion={0}
-        samples={10}
+        samples={8}
         resolution={512}
         transparent={true}
       />
