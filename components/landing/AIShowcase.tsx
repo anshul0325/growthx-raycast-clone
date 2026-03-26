@@ -73,8 +73,9 @@ export default function AIShowcase() {
       position: "relative", 
       overflow: "hidden",
       backgroundImage: "url('/featureBackground.webp')",
-      backgroundSize: "cover",
+      backgroundSize: "800px",
       backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
     }}>
       <div style={{
         maxWidth: "1100px",
@@ -143,8 +144,9 @@ export default function AIShowcase() {
           maxWidth: "860px",
           marginBottom: "30px",
           borderRadius: "16px",
-          border: "1px solid rgba(255,255,255,0.09)",
-          background: "linear-gradient(160deg, rgba(22,24,30,0.98) 0%, rgba(14,15,20,0.98) 100%)",
+          border: "1px solid rgba(255,255,255,0.12)",
+          background: "rgba(10, 10, 15, 0.4)",
+          backdropFilter: "blur(12px)",
           boxShadow: "0 0 0 1px rgba(255,255,255,0.04), 0 32px 80px rgba(0,0,0,0.7)",
           overflow: "hidden",
           display: "flex",
