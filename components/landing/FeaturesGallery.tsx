@@ -101,7 +101,18 @@ export default function FeaturesGallery() {
           }}>
             <DesktopMenuBar />
           <div style={{ position: "relative", zIndex: 1, height: "720px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 0 102px" }}>
-            <div style={{ position: "relative", zIndex: 1, width: "750px", height: "475px", overflow: "hidden", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 32px 80px rgba(0,0,0,0.7), 0 0 0 .5px rgba(255,255,255,0.06), 0 1px 0 0 rgba(255,255,255,0.05) inset" }}>
+            <div style={{ 
+              position: "relative", 
+              zIndex: 1, 
+              width: "750px", 
+              height: "475px", 
+              overflow: "hidden", 
+              borderRadius: "12px", 
+              border: "1px solid rgba(255,255,255,0.12)", 
+              background: "rgba(10, 10, 15, 0.4)",
+              backdropFilter: "blur(12px)",
+              boxShadow: "0 32px 80px rgba(0,0,0,0.7), 0 0 0 .5px rgba(255,255,255,0.06), 0 1px 0 0 rgba(255,255,255,0.05) inset" 
+            }}>
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div key={`${active.id}-${cycleKey}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }} style={{ position: "absolute", inset: 0 }}>
                   {renderShowcase(active.id)}
