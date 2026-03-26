@@ -243,7 +243,7 @@ export default function APISection() {
         {/* Row 7: Get started (col 2) */}
         <div style={{ boxShadow: CELL }} />
         <TextCell href="https://developers.raycast.com" style={{ minHeight: "auto", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: "8px" }}>
-          <a href="https://developers.raycast.com" target="_blank" rel="noreferrer" style={{
+          <div style={{
             display: "flex", alignItems: "center", gap: "8px",
             fontFamily: "monospace", fontSize: "14px", color: "white", textDecoration: "none", letterSpacing: "0.3px",
           }}>
@@ -251,7 +251,7 @@ export default function APISection() {
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.75 4.75 13.25 8m0 0-3.5 3.25M13.25 8H2.75"/>
             </svg>
-          </a>
+          </div>
         </TextCell>
         <div style={{ boxShadow: CELL }} />
 
