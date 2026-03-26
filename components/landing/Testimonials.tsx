@@ -146,8 +146,8 @@ export default function Testimonials() {
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
-    align: "start",
-    dragFree: true,
+    align: "center",
+    skipSnaps: false,
   });
 
   const onSelect = useCallback(() => {
@@ -158,7 +158,13 @@ export default function Testimonials() {
   useEffect(() => {
     if (!emblaApi) return;
     emblaApi.on("select", onSelect);
-    const timer = setInterval(() => emblaApi.scrollNext(), 3500);
+    const timer = setInterval(() => {
+      if (emblaApi.canScrollNext()) {
+        emblaApi.scrollNext();
+      } else {
+        emblaApi.scrollTo(0);
+      }
+    }, 4000);
     return () => {
       clearInterval(timer);
       emblaApi.off("select", onSelect);
@@ -168,10 +174,19 @@ export default function Testimonials() {
   const person = people[selectedIdx];
 
   return (
-    <section style={{ padding: "120px 0 0", overflow: "hidden" }}>
-      <style>{`@keyframes testimonial-fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}`}</style>
+    <section style={{ padding: "120px 0 0", overflow: "hidden", position: "relative" }}>
+      <style>{`
+        @keyframes testimonial-fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        .testimonial-mask {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 10;
+          background: radial-gradient(circle at center, transparent 20%, #07080a 75%);
+        }
+      `}</style>
       {/* Title */}
-      <div style={{ textAlign: "center", marginBottom: "56px", padding: "0 24px" }}>
+      <div style={{ textAlign: "center", marginBottom: "56px", padding: "0 24px", position: "relative", zIndex: 11 }}>
         <h2 style={{ fontSize: "20px", fontWeight: 600, color: "white", letterSpacing: "-0.01em", lineHeight: 1.4, marginBottom: "2px" }}>
           Built for professionals like you.
         </h2>
@@ -180,20 +195,23 @@ export default function Testimonials() {
         </p>
       </div>
 
-      {/* Embla Carousel */}
-      <div ref={emblaRef} style={{ overflow: "hidden" }}>
-        <div style={{ display: "flex", gap: "12px", paddingLeft: "max(24px, calc((100vw - 1204px) / 2))" }}>
-          {people.map((p, i) => (
-            <PersonCard
-              key={i}
-              person={p}
-              isActive={i === selectedIdx}
-              onClick={() => {
-                setSelectedIdx(i);
-                emblaApi?.scrollTo(i);
-              }}
-            />
-          ))}
+      {/* Embla Carousel with Circular Overlay */}
+      <div style={{ position: "relative", width: "100%" }}>
+        <div className="testimonial-mask" />
+        <div ref={emblaRef} style={{ overflow: "hidden" }}>
+          <div style={{ display: "flex", gap: "12px", padding: "40px 0" }}>
+            {people.map((p, i) => (
+              <PersonCard
+                key={i}
+                person={p}
+                isActive={i === selectedIdx}
+                onClick={() => {
+                  setSelectedIdx(i);
+                  emblaApi?.scrollTo(i);
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
 

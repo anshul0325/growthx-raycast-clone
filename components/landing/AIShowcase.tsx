@@ -68,19 +68,14 @@ export default function AIShowcase() {
   const current = chatData[activeTab];
 
   return (
-    <section style={{ padding: "160px 24px 120px", position: "relative", overflow: "hidden" }}>
-      {/* Red ambient glow */}
-        <div style={{
-          position: "absolute",
-          right: "-80px",
-          top: "60px",
-          width: "650px",
-          height: "650px",
-          background: "radial-gradient(ellipse at center, rgba(255,40,40,0.38) 0%, rgba(160,20,20,0.22) 45%, transparent 70%)",
-          pointerEvents: "none",
-          zIndex: 0,
-        }} />
-
+    <section style={{ 
+      padding: "160px 24px 120px", 
+      position: "relative", 
+      overflow: "hidden",
+      backgroundImage: "url('/featureBackground.webp')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+    }}>
       <div style={{
         maxWidth: "1100px",
         margin: "0 auto",
@@ -150,31 +145,12 @@ export default function AIShowcase() {
           borderRadius: "16px",
           border: "1px solid rgba(255,255,255,0.09)",
           background: "linear-gradient(160deg, rgba(22,24,30,0.98) 0%, rgba(14,15,20,0.98) 100%)",
-          boxShadow: "0 0 0 1px rgba(255,255,255,0.04), 0 32px 80px rgba(0,0,0,0.7), 0 0 60px rgba(160,20,20,0.1)",
+          boxShadow: "0 0 0 1px rgba(255,255,255,0.04), 0 32px 80px rgba(0,0,0,0.7)",
           overflow: "hidden",
           display: "flex",
           height: "440px",
           position: "relative",
         }}>
-          {/* Decorative red glow on right side */}
-          <div style={{
-            position: "absolute",
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: "300px",
-            background: "linear-gradient(135deg, transparent 0%, rgba(120,20,20,0.15) 50%, rgba(180,30,30,0.25) 100%)",
-            pointerEvents: "none",
-          }} />
-          <div style={{
-            position: "absolute",
-            right: "-20px",
-            top: "-20px",
-            width: "260px",
-            height: "260px",
-            background: "radial-gradient(ellipse at center, rgba(200,40,40,0.2) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }} />
 
           {/* Sidebar */}
           <div style={{

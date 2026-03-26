@@ -62,7 +62,8 @@ function DottedCell({ children, style }: { children?: React.ReactNode; style?: R
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      padding: "50px",
+      padding: "20px",
+      background: DOT_BG,
       boxShadow: CELL,
       ...style,
     }}>
@@ -110,7 +111,7 @@ function TextCell({ children, href, style }: { children: React.ReactNode; href?:
 
 export default function APISection() {
   return (
-    <section style={{ position: "relative", overflow: "hidden", padding: "160px 0" }}>
+    <section style={{ position: "relative", overflow: "hidden" }}>
       {/* Fade overlays */}
       <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none", background: "linear-gradient(90deg, #07080a 0%, transparent 8%, transparent 92%, #07080a 100%)" }} />
       <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none", background: "linear-gradient(180deg, #07080a 0%, transparent 6%, transparent 94%, #07080a 100%)" }} />
@@ -123,47 +124,58 @@ export default function APISection() {
         display: "grid",
         gridTemplateColumns: "1fr 1fr 1fr",
         gap: "1px",
-        background: "rgba(255,255,255,0.06)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        backgroundColor: "rgba(255,255,255,0.06)",
       }}>
 
         {/* Row 1: Title (col 1) + Main figure (col 2-3) */}
-        <TextCell style={{ minHeight: "280px", justifyContent: "flex-end", background: "#07080a" }}>
+        <TextCell style={{ minHeight: "280px", justifyContent: "flex-end" }}>
           <h3 style={{ fontSize: "clamp(40px, 4vw, 56px)", fontWeight: 400, color: "white", lineHeight: 1.17, letterSpacing: "0.2px", margin: 0 }}>
             Build the<br />perfect<br />tools.
           </h3>
         </TextCell>
-        <DottedCell style={{ gridColumn: "2 / span 2", minHeight: "280px", padding: 0, background: "#07080a" }}>
+        <DottedCell style={{ gridColumn: "2 / span 2", minHeight: "280px" }}>
           <FigCaption label="FIG_00" />
-          <img src="/images/api-main-figure.svg" alt="Main API Figure" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img src="/images/api-main-figure.svg" alt="Main API Figure" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </DottedCell>
 
         {/* Row 2: Description + Read docs (col 1) + empty dotted (col 2-3) */}
-        <TextCell href="https://developers.raycast.com" style={{ background: "#07080a" }}>
+        <TextCell href="https://developers.raycast.com">
           <p style={{ fontFamily: "monospace", fontSize: "14px", color: "rgba(255,255,255,0.5)", lineHeight: 1.6, margin: 0, letterSpacing: "0.3px" }}>
             Our extension API is designed to allow anyone with web development skills to unleash the power of Raycast.
           </p>
           <div
             className="read-docs-link"
+            onMouseEnter={e => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.color = "white";
+              const arrow = el.querySelector<HTMLElement>(".read-docs-arrow");
+              if (arrow) arrow.style.transform = "translateX(3px)";
+            }}
+            onMouseLeave={e => {
+              const el = e.currentTarget as HTMLElement;
+              el.style.color = "rgba(255,255,255,0.5)";
+              const arrow = el.querySelector<HTMLElement>(".read-docs-arrow");
+              if (arrow) arrow.style.transform = "translateX(0)";
+            }}
             style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "monospace", fontSize: "14px", color: "rgba(255,255,255,0.5)", letterSpacing: "0.3px", cursor: "pointer" }}
           >
             Read the docs
-            <span className="read-docs-arrow" style={{ display: "inline-flex" }}>
+            <span className="read-docs-arrow" style={{ display: "inline-flex", transition: "transform 200ms ease" }}>
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6.25 3.75h6m0 0v6m0-6-8.5 8.5"/>
               </svg>
             </span>
           </div>
         </TextCell>
-        <DottedCell style={{ gridColumn: "2 / span 2", minHeight: "180px", background: "#07080a" }} />
+        <DottedCell style={{ gridColumn: "2 / span 2", minHeight: "180px" }} />
 
         {/* Row 3: React illustration (col 1-2) + React text (col 3) */}
-        <DottedCell style={{ gridColumn: "1 / span 2", minHeight: "380px", padding: 0, background: "#07080a" }}>
+        <DottedCell style={{ gridColumn: "1 / span 2", minHeight: "380px" }}>
           <FigCaption label="FIG_01" />
           <ExternalArrow />
-          <img src="/images/api-react-macos.svg" alt="React to macOS" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img src="/images/api-react-macos.svg" alt="React to macOS" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </DottedCell>
-        <TextCell href="https://developers.raycast.com" style={{ minHeight: "380px", background: "#07080a" }}>
+        <TextCell href="https://developers.raycast.com" style={{ minHeight: "380px" }}>
           <div />
           <div>
             <h4 style={{ fontFamily: "var(--font-inter, sans-serif)", fontSize: "24px", fontWeight: 500, color: "white", margin: "0 0 12px", lineHeight: 1.6, letterSpacing: "0.2px" }}>React to macOS</h4>
@@ -175,11 +187,11 @@ export default function APISection() {
         </TextCell>
 
         {/* Row 4: Built-in illustration (col 1) + Built-in text (col 2) + extra dotted (col 3) */}
-        <DottedCell style={{ minHeight: "300px", padding: 0, background: "#07080a" }}>
+        <DottedCell style={{ minHeight: "300px" }}>
           <FigCaption label="FIG_02" />
-          <img src="/images/api-builtin-ui1.svg" alt="Built-in UI 1" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img src="/images/api-builtin-ui1.svg" alt="Built-in UI 1" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </DottedCell>
-        <TextCell href="https://developers.raycast.com" style={{ minHeight: "300px", background: "#07080a" }}>
+        <TextCell href="https://developers.raycast.com" style={{ minHeight: "300px" }}>
           <div />
           <div>
             <h4 style={{ fontFamily: "var(--font-inter, sans-serif)", fontSize: "24px", fontWeight: 500, color: "white", margin: "0 0 12px", lineHeight: 1.6, letterSpacing: "0.2px" }}>Built-in UI</h4>
@@ -189,13 +201,13 @@ export default function APISection() {
           </div>
           <ExternalArrow />
         </TextCell>
-        <DottedCell style={{ minHeight: "300px", padding: 0, background: "#07080a" }}>
+        <DottedCell style={{ minHeight: "300px" }}>
           <FigCaption label="FIG_02b" />
-          <img src="/images/api-builtin-ui2.svg" alt="Built-in UI 2" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img src="/images/api-builtin-ui2.svg" alt="Built-in UI 2" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </DottedCell>
 
         {/* Row 5: Batteries text (col 1) + Batteries illustration (col 2-3) */}
-        <TextCell href="https://developers.raycast.com" style={{ minHeight: "380px", background: "#07080a" }}>
+        <TextCell href="https://developers.raycast.com" style={{ minHeight: "380px" }}>
           <div />
           <div>
             <h4 style={{ fontFamily: "var(--font-inter, sans-serif)", fontSize: "24px", fontWeight: 500, color: "white", margin: "0 0 12px", lineHeight: 1.6, letterSpacing: "0.2px" }}>Batteries included</h4>
@@ -205,19 +217,19 @@ export default function APISection() {
           </div>
           <ExternalArrow />
         </TextCell>
-        <DottedCell style={{ gridColumn: "2 / span 2", minHeight: "380px", padding: 0, background: "#07080a" }}>
+        <DottedCell style={{ gridColumn: "2 / span 2", minHeight: "380px" }}>
           <FigCaption label="FIG_03" />
           <ExternalArrow />
-          <img src="/images/api-batteries-included.svg" alt="Batteries Included" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img src="/images/api-batteries-included.svg" alt="Batteries Included" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </DottedCell>
 
         {/* Row 6: Publish illustration (col 1-2) + Publish text (col 3) */}
-        <DottedCell style={{ gridColumn: "1 / span 2", minHeight: "380px", padding: 0, background: "#07080a" }}>
+        <DottedCell style={{ gridColumn: "1 / span 2", minHeight: "380px" }}>
           <FigCaption label="FIG_04" />
           <ExternalArrow />
-          <img src="/images/api-publish-store.svg" alt="Publish to Store" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img src="/images/api-publish-store.svg" alt="Publish to Store" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         </DottedCell>
-        <TextCell href="https://developers.raycast.com" style={{ minHeight: "380px", background: "#07080a" }}>
+        <TextCell href="https://developers.raycast.com" style={{ minHeight: "380px" }}>
           <div />
           <div>
             <h4 style={{ fontFamily: "var(--font-inter, sans-serif)", fontSize: "24px", fontWeight: 500, color: "white", margin: "0 0 12px", lineHeight: 1.6, letterSpacing: "0.2px" }}>Publish to the Store</h4>
@@ -229,8 +241,8 @@ export default function APISection() {
         </TextCell>
 
         {/* Row 7: Get started (col 2) */}
-        <div style={{ background: "#07080a" }} />
-        <TextCell href="https://developers.raycast.com" style={{ minHeight: "auto", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: "8px", background: "#07080a" }}>
+        <div style={{ boxShadow: CELL }} />
+        <TextCell href="https://developers.raycast.com" style={{ minHeight: "auto", flexDirection: "row", alignItems: "center", justifyContent: "flex-start", gap: "8px" }}>
           <a href="https://developers.raycast.com" target="_blank" rel="noreferrer" style={{
             display: "flex", alignItems: "center", gap: "8px",
             fontFamily: "monospace", fontSize: "14px", color: "white", textDecoration: "none", letterSpacing: "0.3px",
@@ -241,7 +253,7 @@ export default function APISection() {
             </svg>
           </a>
         </TextCell>
-        <div style={{ background: "#07080a" }} />
+        <div style={{ boxShadow: CELL }} />
 
       </div>
     </section>
