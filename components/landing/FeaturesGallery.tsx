@@ -91,7 +91,14 @@ export default function FeaturesGallery() {
             <div style={{ position: "absolute", inset: 0, clipPath: "polygon(0 0, 50% 14%, 100% 0, 92% 50%, 100% 100%, 50% 86%, 0 100%, 8% 50%)", background: "radial-gradient(40% 147% at 50% 46.2%, rgba(255,119,119,0.25) 5%, rgba(154,170,255,0.15) 60%, rgba(255,192,192,0) 140%)" }} />
           </div>
           <div style={{ position: "relative", zIndex: 1, borderRadius: "19px", padding: "8px", backgroundColor: "rgba(0,0,0,0.44)", backgroundImage: "radial-gradient(85.77% 49.97% at 51% 5.12%, rgba(255,150,150,0.11) 0px, rgba(222,226,255,0.08) 45.83%, rgba(241,242,255,0.02) 100%)", boxShadow: "rgba(255,255,255,0.04) 0px 0px 80px 40px, rgba(255,255,255,0.3) 0px 0.5px 0px 0px inset" }}>
-          <div style={{ position: "relative", overflow: "hidden", borderRadius: "12px", background: "rgb(7,8,10)" }}>
+          <div style={{ 
+            position: "relative", 
+            overflow: "hidden", 
+            borderRadius: "12px", 
+            backgroundImage: "url('/featureBackground.webp')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}>
             <DesktopMenuBar />
           <div style={{ position: "relative", zIndex: 1, height: "720px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 0 102px" }}>
             <div style={{ position: "relative", zIndex: 1, width: "750px", height: "475px", overflow: "hidden", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 32px 80px rgba(0,0,0,0.7), 0 0 0 .5px rgba(255,255,255,0.06), 0 1px 0 0 rgba(255,255,255,0.05) inset" }}>
