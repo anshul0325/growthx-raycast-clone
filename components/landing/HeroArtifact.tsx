@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo, useEffect } from "react";
+import React, { useRef, useMemo, useEffect, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { MeshTransmissionMaterial, Environment, Float } from "@react-three/drei";
 import * as THREE from "three";
@@ -8,23 +8,23 @@ import * as THREE from "three";
 const CONFIG = {
   glass: {
     transmission: 1,
-    thickness: 2.5,
-    roughness: 0.2,
-    chromaticAberration: 0.15,
-    anisotropy: 1,
+    thickness: 2,
+    roughness: 0.1,
+    chromaticAberration: 0.04,
+    anisotropy: 0.1,
     distortion: 0.1,
-    ior: 1.1,
+    ior: 1.2,
     color: "#ffffff",
     attenuationColor: "#ffffff",
-    attenuationDistance: 1,
+    attenuationDistance: 0.5,
     ribFrequency: 20,
-    ribIntensity: 0.4,
+    ribIntensity: 0.3,
     ribRotation: 139,
   },
   cube: {
     speed: 0.3,
     color: "#ff0040",
-    positionZ: -1.5,
+    positionZ: -1.2,
     axisX: 0.9,
     axisY: 1.1,
     axisZ: 1.4,
@@ -50,11 +50,11 @@ function RotatingCube({ config }: { config: typeof CONFIG.cube }) {
       <meshStandardMaterial 
         color={config.color} 
         emissive={config.color} 
-        emissiveIntensity={2} 
+        emissiveIntensity={4} 
       />
       <lineSegments>
         <edgesGeometry args={[edgesBoxGeo]} />
-        <lineBasicMaterial color="white" transparent opacity={0.5} />
+        <lineBasicMaterial color="white" transparent opacity={0.6} />
       </lineSegments>
     </mesh>
   );
@@ -123,6 +123,13 @@ function FrostedGlass({ config }: { config: typeof CONFIG.glass }) {
 }
 
 export default function HeroArtifact() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return (
+    <div style={{ position: "absolute", inset: 0, zIndex: 1, backgroundColor: "#07080a" }} />
+  );
+
   return (
     <div style={{ 
       position: "absolute", 
@@ -131,7 +138,8 @@ export default function HeroArtifact() {
       pointerEvents: "none",
       height: "100vh",
       width: "100%",
-      overflow: "hidden"
+      overflow: "hidden",
+      backgroundColor: "#07080a"
     }}>
       <Canvas 
         camera={{ position: [0, 0, 5], fov: 45 }} 
@@ -160,7 +168,3 @@ export default function HeroArtifact() {
     </div>
   );
 }
-
-
-
-

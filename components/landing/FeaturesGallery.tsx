@@ -682,6 +682,11 @@ function WinLayoutIcon({ label }: { label: string }) {
 }
 
 function StarField() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Stars positioned OUTSIDE the frame border in a thin ring (~12px strip)
   // Container matches the outer frame bounds (inset:0), no overflow:hidden
   // so stars with negative positions appear outside the frame edge
@@ -708,6 +713,8 @@ function StarField() {
     const x = s(i + 50) * 49 + 1;
     stars.push({ left: `calc(100% + ${x}px)`, top: `${s(i) * 100}%`, delay: `${(s(i + 200) * 7000).toFixed(0)}ms`, duration: `${(7000 + s(i + 300) * 7000).toFixed(0)}ms` });
   }
+
+  if (!mounted) return null;
 
   return (
     <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 2 }}>
