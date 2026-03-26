@@ -129,7 +129,7 @@ export default function HeroArtifact() {
       <Canvas 
         camera={{ position: [0, 0, 5], fov: 45 }} 
         gl={{ 
-          alpha: false, // Changed to false to show the background color
+          alpha: true, // Restore transparency to show the site background
           antialias: false,
           powerPreference: "high-performance",
           stencil: false,
@@ -137,7 +137,6 @@ export default function HeroArtifact() {
         }}
         dpr={[1, 1.5]}
       >
-        <color attach="background" args={["#07080a"]} />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1.5} />
         <pointLight position={[-10, -10, -10]} color="#ff00ff" />
