@@ -109,7 +109,7 @@ export default function HeroArtifact() {
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1.5} />
         <pointLight position={[-10, -10, -10]} color="#ff00ff" />
-        <Environment preset="city" />
+        <Environment preset="city" background={false} />
 
         <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
           <RotatingCube config={CONFIG.cube} />

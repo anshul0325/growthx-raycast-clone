@@ -122,39 +122,50 @@ export default function FeatureWall() {
             <a
               href="#download"
               style={{
-                display: "inline-flex", alignItems: "center", gap: "8px",
-                height: "44px", padding: "0 24px", borderRadius: "10px",
-                background: "#FFFFFF", color: "#000000",
-                fontSize: "15px", fontWeight: 600, textDecoration: "none",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1)",
-                transition: "transform 0.2s ease, background 0.2s ease",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                height: "40px",
+                padding: "0 18px",
+                borderRadius: "8px",
+                background: "rgba(255,255,255,0.92)",
+                color: "rgb(14,15,16)",
+                fontSize: "14px",
+                fontWeight: 500,
+                textDecoration: "none",
+                boxShadow: "rgba(0, 0, 0, 0.5) 0px 0px 0px 2px, rgba(255, 255, 255, 0.19) 0px 0px 14px 0px, rgba(0, 0, 0, 0.2) 0px -1px 0.4px 0px inset, rgb(255, 255, 255) 0px 1px 0.4px 0px inset",
+                whiteSpace: "nowrap",
+                transition: "opacity 0.2s",
               }}
-              onMouseEnter={e => { 
-                (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
-                (e.currentTarget as HTMLElement).style.background = "#f0f0f0";
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.opacity = "0.88";
               }}
-              onMouseLeave={e => { 
-                (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                (e.currentTarget as HTMLElement).style.background = "#FFFFFF";
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.opacity = "1";
               }}
             >
-              <svg width="14" height="16" viewBox="0 0 814 1000" fill="currentColor">
-                <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.3-155.5-127.8C46.5 629.7 0 501.4 0 373.8c0-14.5.7-29 2-43.5 11.1-119.4 80.6-221.3 170.4-272.1 24.6-14.5 50.6-25.9 77.9-33.8 27.6-8 56.4-11.8 85.3-11.8 29.5 0 57.1 11.6 82.7 15.5 22.2 3.4 44.2 11.5 66.3 11.5 21.2 0 42.3-7.4 63.1-9.5 28.4-2.8 56.5 3.2 83.3 11.7 28.7 9.2 55.2 25 77.4 45.6z" />
-              </svg>
+              <AppleIcon />
               Download Raycast
             </a>
           </motion.div>
-        </div>
+          </div>
 
-        {/* Right: keyboard — overflows right, clipped */}
-        <div style={{ overflow: "hidden", paddingLeft: "24px" }}>
+          {/* Right: keyboard — overflows right, clipped */}
+          <div style={{ overflow: "hidden", paddingLeft: "24px" }}>
           <KeyboardWithFeatures />
-        </div>
-      </div>
-    </section>
-  );
-}
+          </div>
+          </div>
+          </section>
+          );
+          }
 
+          function AppleIcon() {
+          return (
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+          <path fill="currentColor" d="M12.665 15.358c-.905.844-1.893.711-2.843.311-1.006-.409-1.93-.427-2.991 0-1.33.551-2.03.391-2.825-.31C-.498 10.886.166 4.078 5.28 3.83c1.246.062 2.114.657 2.843.71 1.09-.213 2.133-.826 3.296-.746 1.393.107 2.446.64 3.138 1.6-2.88 1.662-2.197 5.315.443 6.337-.526 1.333-1.21 2.657-2.345 3.635zM8.03 3.778C7.892 1.794 9.563.16 11.483 0c.268 2.293-2.16 4-3.452 3.777" />
+          </svg>
+          );
+          }
 function KeyboardWithFeatures() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.15 });

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Agentation } from "agentation";
 
 export const metadata: Metadata = {
   title: "Raycast - Your shortcut to everything",
@@ -28,7 +27,6 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
-        <Agentation endpoint="http://localhost:4747" />
       </body>
     </html>
   );
