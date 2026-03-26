@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { MeshTransmissionMaterial, Environment, Float } from "@react-three/drei";
 import * as THREE from "three";
@@ -32,22 +32,28 @@ const CONFIG = {
   }
 };
 
+// Static geometries and vectors
+const cubeBoxGeo = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+const edgesBoxGeo = new THREE.BoxGeometry(1.51, 1.51, 1.51);
+const glassPlaneGeo = new THREE.PlaneGeometry(10, 10);
+const normalScaleVec = new THREE.Vector2(CONFIG.glass.ribIntensity, CONFIG.glass.ribIntensity);
+
 function RotatingCube() {
   const meshRef = useRef<THREE.Mesh>(null!);
   const { speed, axisX, axisY, axisZ, color, positionZ } = CONFIG.cube;
 
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => {
+    if (!meshRef.current) return;
     meshRef.current.rotation.x += delta * speed * axisX;
     meshRef.current.rotation.y += delta * speed * axisY;
     meshRef.current.rotation.z += delta * speed * axisZ;
   });
 
   return (
-    <mesh ref={meshRef} position={[0, 0, positionZ]}>
-      <boxGeometry args={[1.5, 1.5, 1.5]} />
+    <mesh ref={meshRef} position={[0, 0, positionZ]} geometry={cubeBoxGeo}>
       <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.5} />
       <lineSegments>
-        <edgesGeometry args={[new THREE.BoxGeometry(1.51, 1.51, 1.51)]} />
+        <edgesGeometry args={[edgesBoxGeo]} />
         <lineBasicMaterial color="white" transparent opacity={0.2} />
       </lineSegments>
     </mesh>
@@ -88,16 +94,24 @@ function RibbedGlass() {
     const texture = new THREE.CanvasTexture(canvas);
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
     return texture;
-  }, []);
+  }, [ribFrequency, ribRotation]);
+
+  useEffect(() => {
+    return () => {
+      normalMap?.dispose();
+    };
+  }, [normalMap]);
 
   return (
-    <mesh position={[0, 0, 1]}>
-      <planeGeometry args={[10, 10]} />
+    <mesh position={[0, 0, 1]} geometry={glassPlaneGeo}>
       <MeshTransmissionMaterial
         backside={true}
         {...rest}
         normalMap={normalMap || undefined}
-        normalScale={new THREE.Vector2(ribIntensity, ribIntensity)}
+        normalScale={normalScaleVec}
+        temporalDistortion={0}
+        samples={8}
+        resolution={512}
       />
     </mesh>
   );
@@ -106,7 +120,16 @@ function RibbedGlass() {
 export default function HeroBackground() {
   return (
     <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden opacity-40">
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]}>
+      <Canvas 
+        camera={{ position: [0, 0, 5], fov: 45 }} 
+        dpr={[1, 1.5]}
+        gl={{ 
+          antialias: false, 
+          powerPreference: "high-performance",
+          alpha: true,
+          stencil: false
+        }}
+      >
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
         <Environment preset="city" />
@@ -122,3 +145,4 @@ export default function HeroBackground() {
     </div>
   );
 }
+

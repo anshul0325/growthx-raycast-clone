@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState, useMemo, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { MeshTransmissionMaterial, OrbitControls, Environment, Float } from "@react-three/drei";
 import * as THREE from "three";
@@ -36,21 +36,26 @@ interface CubeConfig {
 
 // --- Scene Components ---
 
+// Static geometries and vectors to avoid re-creation
+const cubeBoxGeo = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+const edgesBoxGeo = new THREE.BoxGeometry(1.51, 1.51, 1.51);
+const glassPlaneGeo = new THREE.PlaneGeometry(6, 6);
+
 function RotatingCube({ config }: { config: CubeConfig }) {
   const meshRef = useRef<THREE.Mesh>(null!);
 
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => {
+    if (!meshRef.current) return;
     meshRef.current.rotation.x += delta * config.speed * config.axisX;
     meshRef.current.rotation.y += delta * config.speed * config.axisY;
     meshRef.current.rotation.z += delta * config.speed * config.axisZ;
   });
 
   return (
-    <mesh ref={meshRef} position={[0, 0, config.positionZ]}>
-      <boxGeometry args={[1.5, 1.5, 1.5]} />
+    <mesh ref={meshRef} position={[0, 0, config.positionZ]} geometry={cubeBoxGeo}>
       <meshStandardMaterial color={config.color} emissive={config.color} emissiveIntensity={0.5} />
       <lineSegments>
-        <edgesGeometry args={[new THREE.BoxGeometry(1.51, 1.51, 1.51)]} />
+        <edgesGeometry args={[edgesBoxGeo]} />
         <lineBasicMaterial color="white" transparent opacity={0.3} />
       </lineSegments>
     </mesh>
@@ -76,19 +81,13 @@ function FrostedGlass({ config }: { config: GlassConfig }) {
     for (let y = 0; y < size; y++) {
       for (let x = 0; x < size; x++) {
         const idx = (y * size + x) * 4;
-        
-        // Project current pixel onto the rib normal direction
         const projected = (x / size) * cosR + (y / size) * sinR;
         const angle = projected * Math.PI * 2 * freq;
-        
-        // The normal perturbation (derivative of the sine wave)
         const val = Math.cos(angle); 
-        
-        // Normal X and Y components based on rotation
         imgData.data[idx] = (val * cosR * 0.5 + 0.5) * 255;
         imgData.data[idx + 1] = (val * sinR * 0.5 + 0.5) * 255;
-        imgData.data[idx + 2] = 255; // Blue (Z) is constant
-        imgData.data[idx + 3] = 255; // Alpha
+        imgData.data[idx + 2] = 255; 
+        imgData.data[idx + 3] = 255; 
       }
     }
     ctx.putImageData(imgData, 0, 0);
@@ -98,16 +97,26 @@ function FrostedGlass({ config }: { config: GlassConfig }) {
     return texture;
   }, [config.ribFrequency, config.ribRotation]);
 
+  // Ensure texture disposal to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      normalMap?.dispose();
+    };
+  }, [normalMap]);
+
+  const normalScale = useMemo(() => new THREE.Vector2(config.ribIntensity, config.ribIntensity), [config.ribIntensity]);
+
   return (
-    <mesh position={[0, 0, 1]}>
-      <planeGeometry args={[6, 6]} />
+    <mesh position={[0, 0, 1]} geometry={glassPlaneGeo}>
       <MeshTransmissionMaterial
         backside={true}
         {...config}
         normalMap={normalMap || undefined}
-        normalScale={new THREE.Vector2(config.ribIntensity, config.ribIntensity)}
+        normalScale={normalScale}
         distortion={0.5}
-        temporalDistortion={0.1}
+        temporalDistortion={0} // Disable for performance
+        samples={8} // Lower samples
+        resolution={512}
       />
     </mesh>
   );
