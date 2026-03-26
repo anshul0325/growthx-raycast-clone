@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo, useEffect } from "react";
+import React, { useRef, useMemo, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { MeshTransmissionMaterial, OrbitControls, Environment, Float } from "@react-three/drei";
 import * as THREE from "three";
@@ -139,7 +139,27 @@ function FrostedGlass() {
 
 // --- Page ---
 
+function isWebGLAvailable(): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+    );
+  } catch {
+    return false;
+  }
+}
+
 export default function Playground() {
+  const [mounted, setMounted] = useState(false);
+  const [webglAvailable, setWebglAvailable] = useState(true);
+
+  useEffect(() => {
+    setWebglAvailable(isWebGLAvailable());
+    setMounted(true);
+  }, []);
+
   return (
     <main className="relative w-full h-screen bg-black overflow-hidden">
       <Link
@@ -150,23 +170,34 @@ export default function Playground() {
         Back
       </Link>
 
-      <div className="absolute inset-0">
-        <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-          <color attach="background" args={["#050505"]} />
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1.5} />
-          <pointLight position={[-10, -10, -10]} color="#ff00ff" />
-          <Environment preset="city" />
+      {mounted && webglAvailable && (
+        <div className="absolute inset-0">
+          <Canvas
+            camera={{ position: [0, 0, 5], fov: 45 }}
+            gl={{ failIfMajorPerformanceCaveat: false }}
+          >
+            <color attach="background" args={["#050505"]} />
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} intensity={1.5} />
+            <pointLight position={[-10, -10, -10]} color="#ff00ff" />
+            <Environment preset="city" />
 
-          <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-            <RotatingCube />
-          </Float>
+            <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+              <RotatingCube />
+            </Float>
 
-          <FrostedGlass />
+            <FrostedGlass />
 
-          <OrbitControls enableZoom={true} enablePan={false} makeDefault />
-        </Canvas>
-      </div>
+            <OrbitControls enableZoom={true} enablePan={false} makeDefault />
+          </Canvas>
+        </div>
+      )}
+
+      {mounted && !webglAvailable && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <p className="text-white/30 text-sm">WebGL is not available in this environment.</p>
+        </div>
+      )}
     </main>
   );
 }

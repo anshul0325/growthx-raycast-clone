@@ -122,36 +122,78 @@ function FrostedGlass({ config }: { config: typeof CONFIG.glass }) {
   );
 }
 
+function isWebGLAvailable(): boolean {
+  try {
+    const canvas = document.createElement("canvas");
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+    );
+  } catch {
+    return false;
+  }
+}
+
+const containerStyle: React.CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  zIndex: 1,
+  pointerEvents: "none",
+  height: "100vh",
+  width: "100%",
+  overflow: "hidden",
+  backgroundColor: "#07080a",
+};
+
+function FallbackGlow() {
+  return (
+    <div style={containerStyle}>
+      <div style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: "600px",
+        height: "600px",
+        borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(255,0,64,0.15) 0%, rgba(128,0,255,0.08) 50%, transparent 70%)",
+        filter: "blur(60px)",
+      }} />
+    </div>
+  );
+}
+
 export default function HeroArtifact() {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const [webglAvailable, setWebglAvailable] = useState(true);
 
-  if (!mounted) return (
-    <div style={{ position: "absolute", inset: 0, zIndex: 1, backgroundColor: "#07080a" }} />
-  );
+  useEffect(() => {
+    setWebglAvailable(isWebGLAvailable());
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return <div style={{ position: "absolute", inset: 0, zIndex: 1, backgroundColor: "#07080a" }} />;
+  if (!webglAvailable) return <FallbackGlow />;
 
   return (
-    <div style={{ 
-      position: "absolute", 
-      inset: 0, 
-      zIndex: 1, 
-      pointerEvents: "none",
-      height: "100vh",
-      width: "100%",
-      overflow: "hidden",
-      backgroundColor: "#07080a"
-    }}>
-      <Canvas 
-        camera={{ position: [0, 0, 5], fov: 45 }} 
-        gl={{ 
+    <div style={containerStyle}>
+      <Canvas
+        camera={{ position: [0, 0, 5], fov: 45 }}
+        gl={{
           alpha: true,
           antialias: true,
           powerPreference: "high-performance",
           stencil: false,
           depth: true,
-          premultipliedAlpha: false
+          premultipliedAlpha: false,
+          failIfMajorPerformanceCaveat: false,
         }}
         dpr={[1, 2]}
+        onCreated={({ gl }) => {
+          if (!gl.getContext()) {
+            setWebglAvailable(false);
+          }
+        }}
       >
         <ambientLight intensity={1.5} />
         <pointLight position={[10, 10, 10]} intensity={2.5} />
