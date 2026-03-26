@@ -127,6 +127,8 @@ export default function FeaturesGallery() {
                   {renderShowcase(active.id)}
                 </motion.div>
               </AnimatePresence>
+              {/* Subtle bottom blur vignette */}
+              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "96px", background: "linear-gradient(to bottom, transparent 0%, rgba(8,8,12,0.55) 60%, rgba(6,6,10,0.82) 100%)", backdropFilter: "blur(6px)", WebkitMaskImage: "linear-gradient(to bottom, transparent, black 40%)", maskImage: "linear-gradient(to bottom, transparent, black 40%)", zIndex: 4, pointerEvents: "none", borderRadius: "0 0 12px 12px" }} />
             </div>
             
             <div style={{ position: "absolute", bottom: "24px", left: "50%", transform: "translateX(-50%)", zIndex: 10, display: "flex", alignItems: "flex-end", gap: "8px", padding: "8px", borderRadius: "20px", background: "linear-gradient(181deg, rgba(0,0,0,0.1) 4.5%, rgba(255,255,255,0.03) 99.51%)", border: "0.8px solid rgba(255,255,255,0.06)", backdropFilter: "blur(10px)", boxShadow: "rgba(0,0,0,0.2) 0px 0px 1px 0px, rgba(0,0,0,0.17) 0px 2px 2px 0px, rgba(0,0,0,0.1) 0px 4px 3px 0px, rgba(0,0,0,0.03) 0px 7px 3px 0px, rgba(0,0,0,0.25) 0px 4px 4px 0px, rgba(255,255,255,0.1) 0px 1px 0px 0px inset" }}>
