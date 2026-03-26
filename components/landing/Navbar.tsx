@@ -45,8 +45,8 @@ export default function Navbar() {
           maxWidth: "1204px",
           padding: "17px 33px",
           background: scrolled
-            ? "linear-gradient(136.285deg, rgba(17, 18, 20, 0.92) 4.87%, rgba(12, 13, 15, 0.98) 75.88%)"
-            : "linear-gradient(136.285deg, rgba(17, 18, 20, 0.75) 4.87%, rgba(12, 13, 15, 0.9) 75.88%)",
+            ? "linear-gradient(136.285deg, rgba(17, 18, 20, 0.82) 4.87%, rgba(12, 13, 15, 0.88) 75.88%)"
+            : "linear-gradient(136.285deg, rgba(17, 18, 20, 0.65) 4.87%, rgba(12, 13, 15, 0.8) 75.88%)",
           transition: "background 300ms ease, box-shadow 300ms ease",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
