@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useMemo, useEffect } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import React, { useRef, useMemo, useEffect, useState } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { MeshTransmissionMaterial, Environment, Float } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -34,7 +34,6 @@ const CONFIG = {
 // Static geometries and vectors to avoid re-creation
 const cubeBoxGeo = new THREE.BoxGeometry(1.5, 1.5, 1.5);
 const edgesBoxGeo = new THREE.BoxGeometry(1.51, 1.51, 1.51);
-const glassPlaneGeo = new THREE.PlaneGeometry(6, 6);
 const normalScaleVec = new THREE.Vector2(CONFIG.glass.ribIntensity, CONFIG.glass.ribIntensity);
 
 function RotatingCube({ config }: { config: typeof CONFIG.cube }) {
@@ -59,6 +58,14 @@ function RotatingCube({ config }: { config: typeof CONFIG.cube }) {
 }
 
 function FrostedGlass({ config }: { config: typeof CONFIG.glass }) {
+  const { viewport } = useThree();
+  
+  // Calculate size to fill viewport while maintaining the "standard" 1440px look
+  // viewport units are in world space.
+  const width = viewport.width;
+  const height = viewport.height;
+  const size = Math.max(width, height) * 1.5;
+
   const normalMap = useMemo(() => {
     if (typeof document === 'undefined') return null;
     const canvas = document.createElement("canvas");
@@ -67,17 +74,17 @@ function FrostedGlass({ config }: { config: typeof CONFIG.glass }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return null;
 
-    const size = 512;
+    const canvasSize = 512;
     const freq = config.ribFrequency;
     const rad = (config.ribRotation * Math.PI) / 180;
     const cosR = Math.cos(rad);
     const sinR = Math.sin(rad);
 
-    const imgData = ctx.createImageData(size, size);
-    for (let y = 0; y < size; y++) {
-      for (let x = 0; x < size; x++) {
-        const idx = (y * size + x) * 4;
-        const projected = (x / size) * cosR + (y / size) * sinR;
+    const imgData = ctx.createImageData(canvasSize, canvasSize);
+    for (let y = 0; y < canvasSize; y++) {
+      for (let x = 0; x < canvasSize; x++) {
+        const idx = (y * canvasSize + x) * 4;
+        const projected = (x / canvasSize) * cosR + (y / canvasSize) * sinR;
         const angle = projected * Math.PI * 2 * freq;
         const val = Math.cos(angle); 
         imgData.data[idx] = (val * cosR * 0.5 + 0.5) * 255;
@@ -93,7 +100,6 @@ function FrostedGlass({ config }: { config: typeof CONFIG.glass }) {
     return texture;
   }, [config.ribFrequency, config.ribRotation]);
 
-  // Ensure texture disposal to prevent RAM/GPU memory leaks
   useEffect(() => {
     return () => {
       normalMap?.dispose();
@@ -101,16 +107,17 @@ function FrostedGlass({ config }: { config: typeof CONFIG.glass }) {
   }, [normalMap]);
 
   return (
-    <mesh position={[0, 0, 1]} geometry={glassPlaneGeo}>
+    <mesh position={[0, 0, 1]}>
+      <planeGeometry args={[size, size]} />
       <MeshTransmissionMaterial
         backside={true}
         {...config}
         normalMap={normalMap || undefined}
         normalScale={normalScaleVec}
         distortion={0.5}
-        temporalDistortion={0} // Set to 0 to avoid unnecessary constant re-renders
-        samples={8} // Lower samples for better performance
-        resolution={512} // Fixed resolution for buffer
+        temporalDistortion={0}
+        samples={8}
+        resolution={512}
       />
     </mesh>
   );
@@ -122,14 +129,15 @@ export default function HeroArtifact() {
       <Canvas 
         camera={{ position: [0, 0, 5], fov: 45 }} 
         gl={{ 
-          alpha: true, 
-          antialias: false, // Disabling antialias can save a lot of performance
+          alpha: false, // Changed to false to show the background color
+          antialias: false,
           powerPreference: "high-performance",
           stencil: false,
           depth: true
         }}
-        dpr={[1, 1.5]} // Limit DPR to 1.5 for better performance on high-res screens
+        dpr={[1, 1.5]}
       >
+        <color attach="background" args={["#07080a"]} />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1.5} />
         <pointLight position={[-10, -10, -10]} color="#ff00ff" />
@@ -144,4 +152,5 @@ export default function HeroArtifact() {
     </div>
   );
 }
+
 
