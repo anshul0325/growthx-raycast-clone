@@ -109,7 +109,7 @@ export default function FeatureWall() {
               initial={{ opacity: 0, y: 20 }}
               animate={isTextInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, ease: EASE, delay: 0.2 }}
-              style={{ fontSize: "20px", fontWeight: 400, color: "rgba(255,255,255,0.45)", letterSpacing: "-0.02em", margin: 0, lineHeight: 1.2 }}
+              style={{ fontSize: "20px", fontWeight: 300, color: "rgba(255,255,255,0.45)", letterSpacing: "-0.02em", margin: 0, lineHeight: 1.2 }}
             >
               It&apos;s about feeling like you&apos;re never wasting it.
             </motion.p>

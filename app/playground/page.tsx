@@ -44,19 +44,19 @@ type CubeConfig = {
 const DEFAULT_GLASS: GlassConfig = {
   transmission: 1,
   thickness: 3.3,
-  roughness: 0.02,        // near-zero = glass body invisible
-  chromaticAberration: 3, // high = prismatic rainbow at rib edges
-  anisotropy: 2.88,
-  distortion: 0,
-  ior: 1.5,               // stronger refraction
+  roughness: 0,        // User requested no white light/specular
+  chromaticAberration: 0.22,
+  anisotropy: 2.5,
+  distortion: 0.2,
+  ior: 1.2,
   color: "#ffffff",
   attenuationColor: "#ffffff",
   attenuationDistance: 0.5,
   ribFrequency: 20,
-  ribIntensity: 1.5,      // strong normals so ribs are visible
-  ribRotation: 90,
-  ribSharpness: 4,        // flat-faced ribs, sharp edges
-  ribProfile: "prism",    // V-groove = symmetric prismatic ribs
+  ribIntensity: 0.5,
+  ribRotation: 139,
+  ribSharpness: 4,
+  ribProfile: "sine",    // HeroArtifact uses Math.cos, which is sine-like
   samples: 16,
 };
 
@@ -360,7 +360,7 @@ export default function Playground() {
   }, []);
 
   return (
-    <main className="relative w-full h-screen bg-black overflow-hidden">
+    <main className="relative w-full h-screen overflow-hidden" style={{ backgroundColor: "#07080a" }}>
       <Link
         href="/"
         className="absolute top-6 left-6 z-10 flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md text-white/60 hover:text-white hover:bg-white/10 transition-all text-sm"
@@ -443,13 +443,9 @@ export default function Playground() {
         <div className="absolute inset-0">
           <Canvas
             camera={{ position: [0, 0, 5], fov: 45 }}
-            gl={{ failIfMajorPerformanceCaveat: false }}
+            gl={{ alpha: false, failIfMajorPerformanceCaveat: false }}
           >
-            <color attach="background" args={["#050505"]} />
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1.5} />
-            <pointLight position={[-10, -10, -10]} color="#ff00ff" />
-            <Environment preset="city" />
+            <color attach="background" args={["#07080a"]} />
 
             <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
               <RotatingCube config={cube} />

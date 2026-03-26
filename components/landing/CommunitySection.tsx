@@ -242,19 +242,20 @@ export default function CommunitySection() {
 
       {/* Footer */}
       <div style={{ textAlign: "center", padding: "0 24px" }}>
-        <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.45)", marginBottom: "12px" }}>
-          Check out our YouTube channel to learn about features you didn&apos;t even know existed.
-        </p>
-        <a
-          href="https://www.youtube.com/@raycastapp"
-          target="_blank"
-          rel="noreferrer"
-          style={{ display: "inline-flex", alignItems: "center", gap: "8px", textDecoration: "none", transition: "opacity 150ms ease" }}
-          onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.75"}
-          onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
-        >
+        <div style={{ maxWidth: "360px", margin: "0 auto" }}>
+          <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.45)", marginBottom: "16px", lineHeight: 1.5 }}>
+            Check out our YouTube channel to learn about features you didn&apos;t even know existed.
+          </p>
+          <a
+            href="https://www.youtube.com/@raycastapp"
+            target="_blank"
+            rel="noreferrer"
+            style={{ display: "inline-flex", alignItems: "center", gap: "8px", textDecoration: "none", transition: "opacity 150ms ease" }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.75"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
+          >
           {/* YouTube wordmark SVG */}
-          <svg width="80" height="18" viewBox="0 0 108 25" fill="none">
+          <svg width="96" height="22" viewBox="0 0 108 25" fill="none">
             <g clipPath="url(#yt-clip)">
               <path d="M34.009 3.953a4.513 4.513 0 0 0-3.173-3.173C28.36.243 17.739.243 17.739.243s-10.622.022-13.26.738a4.513 4.513 0 0 0-3.17 3.174C.67 8.638.361 15.746 1.491 20.224a4.513 4.513 0 0 0 3.173 3.173c2.64.716 13.26.716 13.26.716s10.622 0 13.26-.716a4.513 4.513 0 0 0 3.173-3.173c.8-4.665 1.11-11.772-.02-16.27l.672-.001Z" fill="red"/>
               <path d="m14.554 17.379 8.838-5.136-8.838-5.136v10.272Z" fill="white"/>
@@ -267,8 +268,9 @@ export default function CommunitySection() {
             <path d="M85.986 13.87H81.51v.952c0 .887.085 1.52.255 1.9.17.38.448.57.833.57.406 0 .681-.178.826-.535.144-.356.222-.952.233-1.786l2.116.125c.012.1.018.236.018.405 0 1.042-.285 1.826-.856 2.353-.57.527-1.384.79-2.444.79-1.264 0-2.152-.39-2.664-1.172-.513-.782-.77-2.003-.77-3.663v-1.979c0-1.709.267-2.95.801-3.723.535-.772 1.44-1.158 2.718-1.158 1.224 0 2.103.364 2.638 1.092.535.727.802 1.851.802 3.37v1.459Zm-4.476-4.024v.95h2.152v-.95c0-.86-.08-1.482-.242-1.866-.162-.384-.42-.576-.775-.576-.355 0-.619.195-.79.585-.17.39-.345 1.006-.345 1.857Z" fill="white" fillOpacity=".9"/>
             <defs><clipPath id="yt-clip"><rect width="35.478" height="24" fill="white" transform="translate(0 .243)"/></clipPath></defs>
           </svg>
-          <ArrowIcon />
-        </a>
+            <ArrowIcon />
+          </a>
+        </div>
       </div>
     </section>
   );

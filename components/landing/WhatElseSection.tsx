@@ -217,13 +217,13 @@ export default function WhatElseSection() {
               borderRadius: "20px",
               boxShadow: "0 40px 100px -20px rgba(0,0,0,0.5)",
               width: "100%",
-              maxWidth: "640px",
+              maxWidth: "553px",
             }}>
               <div style={{
                 position: "relative",
                 display: "flex",
                 width: "100%",
-                aspectRatio: "1.2 / 1",
+                aspectRatio: "553 / 528",
                 padding: "1px",
                 background: "rgba(255,255,255,0.05)",
                 backdropFilter: "blur(10px)",
@@ -241,7 +241,7 @@ export default function WhatElseSection() {
                   overflow: "hidden",
                   borderRadius: "19px",
                   background: "#0a0a0a",
-                  padding: "16px",
+                  padding: "8px",
                 }}>
                   {ITEMS.map((item, i) => (
                     <img
@@ -249,11 +249,12 @@ export default function WhatElseSection() {
                       src={item.img}
                       alt={item.alt}
                       style={{
-                        position: i === active ? "relative" : "absolute",
+                        position: "absolute",
                         top: 0,
+                        left: 0,
                         width: "100%",
                         height: "100%",
-                        objectFit: "cover",
+                        objectFit: "fill",
                         opacity: i === active ? 1 : 0,
                         transform: i === active ? "none" : (animating && i === prevActive ? "none" : "scale(0.98) translateY(10px)"),
                         transition: i === active
@@ -272,9 +273,9 @@ export default function WhatElseSection() {
               display: "flex",
               gap: "6px",
               alignItems: "center",
-              width: "280px",
-              height: "2px",
-              marginTop: "32px",
+              width: "240px",
+              height: "8px",
+              marginTop: "16px",
               alignSelf: "center",
             }}>
               {ITEMS.map((_, i) => (

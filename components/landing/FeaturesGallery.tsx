@@ -65,7 +65,17 @@ export default function FeaturesGallery() {
   const [activeIdx, setActiveIdx] = useState(0);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [cycleKey, setCycleKey] = useState(0);
+  const [bgBlur, setBgBlur] = useState(72);
+  const [paletteBlur, setPaletteBlur] = useState(12);
+
   const active = FEATURES[activeIdx];
+
+  useEffect(() => {
+    const savedBg = localStorage.getItem("features-gallery-bg-blur");
+    const savedPalette = localStorage.getItem("features-gallery-palette-blur");
+    if (savedBg) setBgBlur(parseInt(savedBg, 10));
+    if (savedPalette) setPaletteBlur(parseInt(savedPalette, 10));
+  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -82,7 +92,7 @@ export default function FeaturesGallery() {
         <style>{`@keyframes feature-progress{from{transform:translateX(-100%)}to{transform:translateX(0)}}@keyframes feature-blink{0%,48%{opacity:1}52%,100%{opacity:0}}@keyframes feature-toast{0%{opacity:0;transform:translateY(8px) scale(.98)}14%,86%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(8px) scale(.98)}}@keyframes feature-star{0%,100%{opacity:.05;transform:scale(1)}50%{opacity:.22;transform:scale(1.3)}}`}</style>
         <div style={{ textAlign: "center", marginBottom: "48px" }}>
           <h2 style={{ margin: 0, fontSize: "20px", fontWeight: 600, color: "white", letterSpacing: "-0.02em", lineHeight: 1.4 }}>Take shortcuts, not detours.</h2>
-          <p style={{ margin: "2px 0 0", fontSize: "20px", fontWeight: 400, color: "rgba(255,255,255,0.45)", letterSpacing: "-0.02em" }}>One interface, everything you need.</p>
+          <p style={{ margin: "2px 0 0", fontSize: "20px", fontWeight: 300, color: "rgba(255,255,255,0.45)", letterSpacing: "-0.02em" }}>One interface, everything you need.</p>
         </div>
         
         <div style={{ position: "relative" }}>
@@ -108,7 +118,7 @@ export default function FeaturesGallery() {
             padding: "48px 0 102px",
           }}>
             {/* Atmospheric blurred background — featureBackground fills the whole desktop area, heavily blurred */}
-            <div style={{ position: "absolute", inset: "-40px", backgroundImage: "url('/featureBackground.webp')", backgroundSize: "cover", backgroundPosition: "center", filter: "blur(72px)", opacity: 0.72, zIndex: 0, pointerEvents: "none" }} />
+            <div style={{ position: "absolute", inset: "-40px", backgroundImage: "url('/featureBackground.webp')", backgroundSize: "cover", backgroundPosition: "center", filter: `blur(${bgBlur}px)`, opacity: 0.72, zIndex: 0, pointerEvents: "none" }} />
             <div style={{
               position: "relative",
               zIndex: 1,
@@ -118,7 +128,7 @@ export default function FeaturesGallery() {
               borderRadius: "12px",
               border: "1px solid rgba(255,255,255,0.12)",
               background: "rgba(8, 8, 12, 0.52)",
-              backdropFilter: "blur(12px)",
+              backdropFilter: `blur(${paletteBlur}px)`,
               boxShadow: "0 32px 80px rgba(0,0,0,0.7), 0 0 0 .5px rgba(255,255,255,0.06), 0 1px 0 0 rgba(255,255,255,0.05) inset"
             }}>
               <AnimatePresence mode="wait" initial={false}>
@@ -186,10 +196,10 @@ export default function FeaturesGallery() {
         <StarField />
         </div>
 
-        <div style={{ maxWidth: "670px", minHeight: "60px", position: "relative", margin: "0 auto", marginTop: "32px", color: "rgba(255,255,255,0.5)", fontSize: "16px", lineHeight: 1.6, textAlign: "center" }}>
+        <div style={{ maxWidth: "670px", minHeight: "60px", position: "relative", margin: "0 auto", marginTop: "32px", color: "rgba(255,255,255,0.5)", fontSize: "16px", lineHeight: 1.6, textAlign: "center", fontWeight: 300 }}>
           <AnimatePresence mode="wait">
             <motion.div key={active.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }} style={{ position: "absolute", inset: 0 }}>
-              <span style={{ color: "white", fontWeight: 600 }}>{active.boldText}</span> {active.desc}
+              <span style={{ color: "white", fontWeight: 500 }}>{active.boldText}</span> {active.desc}
             </motion.div>
           </AnimatePresence>
         </div>

@@ -15,7 +15,6 @@ export default function Hero() {
         alignItems: "center",
         padding: "0 16px",
         textAlign: "center",
-        backgroundColor: "#07080a",
       }}
     >
       <style>{`

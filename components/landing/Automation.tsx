@@ -276,7 +276,7 @@ export default function Automation() {
                 >
                   +
                 </span>
-                <KeyboardKey letter="L" width={120} active={activeKey === 3 || activeKey === 4} />
+                <KeyboardKey letter="S" width={120} active={activeKey === 3 || activeKey === 4} />
               </div>
 
               <div style={{ padding: "23px 24px 24px", display: "flex", flexDirection: "column", gap: "15px" }}>
@@ -428,7 +428,7 @@ function QuicklinksShowcase() {
             fontFamily: "monospace",
           }}
         >
-          OPTION + COMMAND + L
+          OPTION + COMMAND + S
         </span>
       </div>
     </div>

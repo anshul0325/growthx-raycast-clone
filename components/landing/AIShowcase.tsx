@@ -82,7 +82,6 @@ export default function AIShowcase() {
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         opacity: 0.4,
-        mixBlendMode: "luminosity",
         pointerEvents: "none",
       }} />
       <div style={{
