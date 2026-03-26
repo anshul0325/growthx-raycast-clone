@@ -95,12 +95,18 @@ export default function FeaturesGallery() {
             position: "relative", 
             overflow: "hidden", 
             borderRadius: "12px", 
-            backgroundImage: "url('/featureBackground.webp')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
           }}>
             <DesktopMenuBar />
-          <div style={{ position: "relative", zIndex: 1, height: "720px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 0 102px" }}>
+          <div style={{ 
+            position: "relative", 
+            zIndex: 1, 
+            height: "720px", 
+            display: "flex", 
+            flexDirection: "column", 
+            alignItems: "center", 
+            justifyContent: "center", 
+            padding: "48px 0 102px",
+          }}>
             <div style={{ 
               position: "relative", 
               zIndex: 1, 
@@ -110,6 +116,9 @@ export default function FeaturesGallery() {
               borderRadius: "12px", 
               border: "1px solid rgba(255,255,255,0.12)", 
               background: "rgba(10, 10, 15, 0.4)",
+              backgroundImage: "url('/featureBackground.webp')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
               backdropFilter: "blur(12px)",
               boxShadow: "0 32px 80px rgba(0,0,0,0.7), 0 0 0 .5px rgba(255,255,255,0.06), 0 1px 0 0 rgba(255,255,255,0.05) inset" 
             }}>

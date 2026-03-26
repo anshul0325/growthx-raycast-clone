@@ -72,11 +72,26 @@ export default function AIShowcase() {
       padding: "160px 24px 120px", 
       position: "relative", 
       overflow: "hidden",
-      backgroundImage: "url('/featureBackground.webp')",
-      backgroundSize: "800px",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
     }}>
+      {/* Background Image with Overlay */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        backgroundImage: "url('/featureBackground.webp')",
+        backgroundSize: "640px",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        opacity: 0.4,
+        mixBlendMode: "luminosity",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        background: "radial-gradient(circle at center, transparent 30%, #07080a 100%)",
+        pointerEvents: "none",
+      }} />
+
       <div style={{
         maxWidth: "1100px",
         margin: "0 auto",
